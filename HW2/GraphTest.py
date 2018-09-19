@@ -2,16 +2,17 @@ import matplotlib
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
+
 # Plot size to 14" x 7"
-matplotlib.rc('figure', figsize = (14, 7))
+matplotlib.rc('figure', figsize=(14, 7))
 # Font size to 14
-matplotlib.rc('font', size = 14)
+matplotlib.rc('font', size=14)
 # Do not display top and right frame lines
-matplotlib.rc('axes.spines', top = False, right = False)
+matplotlib.rc('axes.spines', top=False, right=False)
 # Remove grid lines
-matplotlib.rc('axes', grid = False)
+matplotlib.rc('axes', grid=False)
 # Set backgound color to white
-matplotlib.rc('axes', facecolor = 'white')
+matplotlib.rc('axes', facecolor='white')
 
 
 def temporal_graph(x_data, y_data, xlabel, ylabel, title):
@@ -58,20 +59,30 @@ def histogram(data, x_label, y_label, title):
 	n, bins, patches = plt.hist(data, 10)
 	plt.show()
 
-def amzn_new_plot():
-    '''Define this function as you would seem fit to display the plot that interests you using
-    the same dataset. Define your function parameters and display the resulting plots'''
-	
+
+def amzn_new_plot(open, close, title):
+	'''Define this function as you would seem fit to display the plot that interests you using
+	the same dataset. Define your function parameters and display the resulting plots'''
+	data = np.subtract(close, open)
+	fig1, ax1 = plt.subplots()
+	ax1.set_title(title)
+	bp = ax1.boxplot(data, patch_artist=True)
+	ax1.yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
+	for box in bp['boxes']:
+		box.set(color='magenta')
+		box.set_facecolor('blue')
+	plt.show()
 
 
-pdin=pd.read_csv('data/AMZN-5Y-HistoricalQuotes.csv')
-date = pdin.loc[:,'date']
-close = pdin.loc[:,'close']
-volume = pdin.loc[:,'volume']
-opencol = pdin.loc[:,'open']
-high = pdin.loc[:,'high']
-low = pdin.loc[:,'low']
+pdin = pd.read_csv('data/AMZN-5Y-HistoricalQuotes.csv')
+date = pdin.loc[:, 'date']
+close = pdin.loc[:, 'close']
+volume = pdin.loc[:, 'volume']
+opencol = pdin.loc[:, 'open']
+high = pdin.loc[:, 'high']
+low = pdin.loc[:, 'low']
 tempdata = [list(i) for i in zip(opencol, close)]
-#temporal_graph(date, tempdata, "date", "open/close value", "open/close vs date")
-#boxplot(high, low, "aqua", "blue", "high", "low", "high and low box plot")
-#histogram(volume, "volume", "count", "count per volume histogram")
+# temporal_graph(date, tempdata, "date", "open/close value", "open/close vs date")
+# boxplot(high, low, "aqua", "blue", "high", "low", "high and low box plot")
+# histogram(volume, "volume", "count", "count per volume histogram")
+amzn_new_plot(opencol, close, "Change in stock value from open to close")
